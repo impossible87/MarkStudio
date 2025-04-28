@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MarkStudio - 专业的Markdown预览与转换平台">
+    <title>MarkStudio - Markdown预览与转换系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced.css') }}">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/logo.svg') }}">
+    <!-- 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+    <div class="editor-app">
+        <header class="editor-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <a href="{{ url_for('index') }}">
+                            <i class="fas fa-markdown"></i>
+                            <span>Mark<span class="highlight">Studio</span></span>
+                        </a>
+                    </div>
+                    <div class="header-actions">
+                        <button id="saveBtn" class="btn btn-light" data-tooltip="保存Markdown文件">
+                            <i class="fas fa-save"></i>
+                            <span>保存</span>
+                        </button>
+                        <button id="shareBtn" class="btn btn-primary" data-tooltip="创建可分享的链接">
+                            <i class="fas fa-share-alt"></i>
+                            <span>分享</span>
+                        </button>
+                        <div class="header-actions-dropdown">
+                            <button id="moreActionsBtn" class="btn btn-light" data-tooltip="更多操作">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <button id="loadBtn" class="dropdown-item">
+                                    <i class="fas fa-file-upload"></i>
+                                    <span>上传文件</span>
+                                </button>
+                                <button id="checkSystemBtn" class="dropdown-item">
+                                    <i class="fas fa-cog"></i>
+                                    <span>系统检查</span>
+                                </button>
+                                <div class="dropdown-divider"></div>
+                                <div class="theme-item">
+                                    <span>主题</span>
+                                    <div class="theme-switch">
+                                        <input type="checkbox" id="themeToggle">
+                                        <label for="themeToggle" class="toggle-label">
+                                            <i class="fas fa-sun"></i>
+                                            <i class="fas fa-moon"></i>
+                                            <div class="ball"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="file" id="fileInput" style="display: none;" accept=".md,.markdown,.txt,.docx,.pdf">
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="editor-toolbar">
+            <div class="container">
+                <div class="toolbar-content">
+                    <div class="toolbar-section formatting-tools">
+                        <button class="tool-btn" data-format="heading" data-level="1" data-tooltip="标题1">
+                            <i class="fas fa-heading"></i><span>1</span>
+                        </button>
+                        <button class="tool-btn" data-format="heading" data-level="2" data-tooltip="标题2">
+                            <i class="fas fa-heading"></i><span>2</span>
+                        </button>
+                        <button class="tool-btn" data-format="heading" data-level="3" data-tooltip="标题3">
+                            <i class="fas fa-heading"></i><span>3</span>
+                        </button>
+                        <span class="tool-divider"></span>
+                        <button class="tool-btn" data-format="bold" data-tooltip="加粗">
+                            <i class="fas fa-bold"></i>
+                        </button>
+                        <button class="tool-btn" data-format="italic" data-tooltip="斜体">
+                            <i class="fas fa-italic"></i>
+                        </button>
+                        <button class="tool-btn" data-format="strikethrough" data-tooltip="删除线">
+                            <i class="fas fa-strikethrough"></i>
+                        </button>
+                        <span class="tool-divider"></span>
+                        <button class="tool-btn" data-format="link" data-tooltip="链接">
+                            <i class="fas fa-link"></i>
+                        </button>
+                        <button class="tool-btn" data-format="image" data-tooltip="图片">
+                            <i class="fas fa-image"></i>
+                        </button>
+                        <button class="tool-btn" data-format="code" data-tooltip="代码块">
+                            <i class="fas fa-code"></i>
+                        </button>
+                        <button class="tool-btn" data-format="quote" data-tooltip="引用">
+                            <i class="fas fa-quote-right"></i>
+                        </button>
+                    </div>
+                    <div class="toolbar-section file-info">
+                        <span class="supported-formats">
+                            <i class="fas fa-info-circle"></i> 支持格式:
+                            <span class="tag">Markdown</span>
+                            <span class="tag">TXT</span>
+                            <span class="tag">DOCX</span>
+                            <span class="tag">PDF</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <main class="editor-main">
+            <div class="container">
+                <div class="editor-content">
+                    <div class="editor-pane">
+                        <div class="pane-header">
+                            <span><i class="fas fa-edit"></i> 编辑区</span>
+                            <div class="pane-actions">
+                                <button id="copyEditorBtn" class="pane-action-btn" data-tooltip="复制全部">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button id="clearEditorBtn" class="pane-action-btn" data-tooltip="清空编辑器">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="markdown-input-container">
+                            <textarea id="markdownInput" placeholder="在此输入或粘贴Markdown文本...&#10;&#10;支持拖放或粘贴文件到此区域...&#10;&#10;使用工具栏快速插入Markdown格式..."></textarea>
+                        </div>
+                    </div>
+                    <div class="preview-pane">
+                        <div class="pane-header">
+                            <span><i class="fas fa-eye"></i> 预览区</span>
+                            <div class="pane-actions">
+                                <button id="syncScrollBtn" class="pane-action-btn active" data-tooltip="同步滚动">
+                                    <i class="fas fa-link"></i>
+                                </button>
+                                <button id="togglePreviewBtn" class="pane-action-btn" data-tooltip="全屏预览">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="preview-container">
+                            <div id="htmlPreview" class="markdown-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="editor-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-info">
+                        <p>MarkStudio © 2023 | 专业的Markdown预览与转换系统</p>
+                    </div>
+                    <div class="footer-links">
+                        <a href="https://markdown.com.cn/basic-syntax/" target="_blank" rel="noopener">Markdown语法</a>
+                        <a href="https://github.com/markdown-it/markdown-it" target="_blank" rel="noopener">Markdown工具</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        
+        <!-- 模态框 -->
+        <div id="shareModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>分享文档</h2>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="shareTitle">文档标题</label>
+                        <input type="text" id="shareTitle" placeholder="输入文档标题" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="shareUrl">分享链接</label>
+                        <div class="input-group">
+                            <input type="text" id="shareUrl" readonly class="form-input">
+                            <button id="copyShareUrlBtn" class="btn btn-light">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="share-preview">
+                        <p>预览链接将自动生成，可以分享给任何人查看。</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancelShareBtn" class="btn btn-light">取消</button>
+                    <button id="createShareBtn" class="btn btn-primary">创建链接</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 系统信息模态框 -->
+        <div id="systemInfoModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>系统信息</h2>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="systemInfoContent">
+                        <p>加载中...</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-light close-modal-btn">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+        <p>处理中，请稍候...</p>
+    </div>
+    
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText">操作成功</span>
+    </div>
+    
+    <!-- 引入JS库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced.js') }}"></script>
+</body>
+</html>
+</html>
