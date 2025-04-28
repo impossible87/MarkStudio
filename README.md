@@ -67,21 +67,21 @@ pip install -r requirements.txt
 
 3. **配置Pandoc**
 
-Pandoc是用于DOCX转换的必要组件，有两种配置方式：
+Pandoc 是用于 DOCX 转换的必要组件，**无需将 pandoc.exe 上传到 GitHub，只需在本地正确放置即可**。
 
-#### 方式一：安装到系统路径
+#### 下载 Pandoc
+- 访问 [Pandoc 官网](https://pandoc.org/installing.html) 下载适合你操作系统的安装包。
+- Windows 用户建议下载 zip 包或 msi 安装包。
+- Mac 用户可用 Homebrew：`brew install pandoc`
+- Linux 用户可用 apt：`sudo apt-get install pandoc`
 
-- **Windows**: 从[Pandoc官网](https://pandoc.org/installing.html)下载安装包安装
-- **Mac**: `brew install pandoc`
-- **Linux**: `sudo apt-get install pandoc`
+#### 推荐放置路径（任选其一）：
+- 项目根目录：`项目文件夹/pandoc.exe`
+- pandoc 子目录：`项目文件夹/pandoc/pandoc.exe`
+- pandoc/bin 子目录：`项目文件夹/pandoc/bin/pandoc.exe`
+- 或将 pandoc 添加到系统 PATH 环境变量
 
-#### 方式二：放置在项目文件夹中（推荐Windows用户）
-
-1. 从[Pandoc官网](https://pandoc.org/installing.html)下载安装包
-2. 将解压后的`pandoc.exe`放在以下位置之一：
-   - 项目根目录：`项目文件夹/pandoc.exe`
-   - pandoc子目录：`项目文件夹/pandoc/pandoc.exe`
-   - 或：`项目文件夹/pandoc/bin/pandoc.exe`
+> **注意：** pandoc.exe 文件体积较大，不建议上传到 GitHub 仓库。请每位用户根据上述说明自行下载并放置。
 
 ### 配置流程图
 
@@ -128,11 +128,12 @@ python app.py
 
 ### DOCX转换问题
 
-如果在使用DOCX转换功能时遇到问题，请尝试以下步骤：
+如果在使用 DOCX 转换功能时遇到问题，请尝试以下步骤：
 
-1. 点击界面上的"系统检查"按钮，确认Pandoc状态
-2. 如果显示"Pandoc不可用"，请按照上述安装步骤进行配置
-3. 如果已经安装但仍不可用，请尝试将pandoc.exe直接放在项目根目录下
+1. 点击界面上的"系统检查"按钮，确认 Pandoc 状态
+2. 如果显示"Pandoc 不可用"，请按照上述安装步骤进行配置
+3. 如果已经安装但仍不可用，请尝试将 pandoc.exe 直接放在项目根目录或 pandoc 子目录下
+4. 确认未将 pandoc.exe 上传到 GitHub，仅需本地存在即可
 
 ### 文件编码问题
 
