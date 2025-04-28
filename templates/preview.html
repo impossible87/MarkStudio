@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MarkStudio - 专业的Markdown预览与转换平台">
+    <title>{{ title }} - MarkStudio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/logo.svg') }}">
+    <!-- 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <!-- Open Graph元标签 -->
+    <meta property="og:title" content="{{ title }}">
+    <meta property="og:description" content="通过MarkStudio查看精美排版的Markdown文档">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ request.url }}">
+</head>
+<body>
+    <div class="preview-app">
+        <header class="preview-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <a href="{{ url_for('index') }}">
+                            <i class="fas fa-markdown"></i>
+                            <span>Mark<span class="highlight">Studio</span></span>
+                        </a>
+                    </div>
+                    <div class="header-actions">
+                        <button id="printBtn" class="btn btn-light" data-tooltip="打印文档">
+                            <i class="fas fa-print"></i>
+                        </button>
+                        <div class="theme-switch">
+                            <input type="checkbox" id="themeToggle">
+                            <label for="themeToggle" class="toggle-label">
+                                <i class="fas fa-sun"></i>
+                                <i class="fas fa-moon"></i>
+                                <div class="ball"></div>
+                            </label>
+                        </div>
+                        <a href="{{ url_for('index') }}" class="btn btn-primary">
+                            <i class="fas fa-pencil-alt"></i>
+                            <span>编辑新文档</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="document-meta">
+            <div class="container">
+                <h1 class="document-title">{{ title }}</h1>
+                <div class="document-info">
+                    <span><i class="far fa-clock"></i> 创建于 {{ created_time }}</span>
+                    <span><i class="fas fa-link"></i> <a href="{{ request.url }}" id="shareLink">分享链接</a></span>
+                </div>
+            </div>
+        </div>
+
+        <main class="document-content">
+            <div class="container">
+                <div class="toc-container" id="tocContainer">
+                    <div class="toc-header">
+                        <h3><i class="fas fa-list"></i> 目录</h3>
+                        <button class="toc-toggle" id="tocToggle">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                    </div>
+                    <div class="toc-body" id="toc"></div>
+                </div>
+                <article class="markdown-content" id="content">
+                    <!-- 这里将被渲染的Markdown内容替换 -->
+                </article>
+            </div>
+        </main>
+
+        <footer class="preview-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-info">
+                        <p>由 <a href="{{ url_for('index') }}">MarkStudio</a> 提供强力支持</p>
+                    </div>
+                    <div class="footer-links">
+                        <a href="{{ url_for('index') }}">首页</a>
+                        <a href="#" id="backToTop">返回顶部 <i class="fas fa-arrow-up"></i></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText">操作成功</span>
+    </div>
+
+    <!-- 引入JS库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="{{ url_for('static', filename='js/preview.js') }}"></script>
+    <script>
+        // 传递Markdown内容到JS
+        document.addEventListener('DOMContentLoaded', function() {
+            const markdownContent = `{{ content|safe }}`;
+            renderMarkdown(markdownContent);
+        });
+    </script>
+</body>
+</html> 
